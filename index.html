@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitKraken Email Performance Dashboard</title>
+    <title>Promo Winback Performance Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -20,7 +20,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 2rem;
         }
@@ -30,11 +30,7 @@
             margin-bottom: 3rem;
         }
 
-        .gitkraken-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+        .brand-logo {
             color: #00d4aa;
             font-size: 1.8rem;
             font-weight: bold;
@@ -60,24 +56,60 @@
             backdrop-filter: blur(10px);
         }
 
+        .email-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .email-card {
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid;
+        }
+
+        .gitlens-card {
+            background: rgba(124, 58, 237, 0.1);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+
+        .gitkraken-card {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+        }
+
         .email-subject {
             font-size: 1.4rem;
             font-weight: 600;
-            color: #00d4aa;
             margin-bottom: 1rem;
+        }
+
+        .gitlens-subject {
+            color: #a855f7;
+        }
+
+        .gitkraken-subject {
+            color: #00d4aa;
+        }
+
+        .email-preview-text {
+            color: #94a3b8;
+            font-style: italic;
+            margin-bottom: 1rem;
+            font-size: 1rem;
         }
 
         .email-meta {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
-            margin-bottom: 1.5rem;
         }
 
         .meta-item {
             background: rgba(0, 0, 0, 0.3);
             padding: 1rem;
-            border-radius: 8px;
+            border-radius: 6px;
             border: 1px solid rgba(148, 163, 184, 0.1);
         }
 
@@ -92,8 +124,19 @@
             font-weight: 600;
         }
 
-        .email-status {
-            display: inline-block;
+        .meta-value a {
+            text-decoration: underline;
+            font-family: 'Courier New', monospace;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .status-badge {
             background: rgba(255, 193, 7, 0.2);
             color: #ffc107;
             padding: 0.5rem 1rem;
@@ -103,11 +146,77 @@
             border: 1px solid #ffc107;
         }
 
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+        .pending-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid #60a5fa;
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: #60a5fa;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .metrics-section {
             margin-bottom: 3rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin: 2rem 0 2rem 0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .gitlens-title {
+            color: #a855f7;
+        }
+
+        .gitkraken-title {
+            color: #00d4aa;
+        }
+
+        .combined-title {
+            color: #ffffff;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1400px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .metric-card {
@@ -121,12 +230,6 @@
             overflow: hidden;
         }
 
-        .metric-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.2);
-            border-color: rgba(0, 212, 170, 0.4);
-        }
-
         .metric-card::before {
             content: '';
             position: absolute;
@@ -135,6 +238,23 @@
             width: 100%;
             height: 4px;
             background: linear-gradient(90deg, #00d4aa, #7c3aed);
+        }
+
+        .gitlens-card-border {
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+
+        .gitlens-card-border::before {
+            background: linear-gradient(90deg, #a855f7, #7c3aed);
+        }
+
+        .gitkraken-card-border {
+            border-color: rgba(0, 212, 170, 0.3);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.2);
         }
 
         .metric-icon {
@@ -150,6 +270,10 @@
             color: #00d4aa;
         }
 
+        .zero-state .metric-number {
+            color: #64748b;
+        }
+
         .metric-label {
             color: #94a3b8;
             font-size: 1.1rem;
@@ -160,30 +284,6 @@
             color: #64748b;
             font-size: 0.9rem;
             line-height: 1.4;
-        }
-
-        .zero-state {
-            opacity: 0.6;
-        }
-
-        .zero-state .metric-number {
-            color: #64748b;
-        }
-
-        .performance-section {
-            background: rgba(15, 23, 42, 0.8);
-            border-radius: 12px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #00d4aa;
         }
 
         .progress-bar {
@@ -201,11 +301,75 @@
             transition: width 2s ease;
         }
 
+        .gitlens-progress {
+            background: linear-gradient(90deg, #a855f7, #7c3aed);
+        }
+
+        .combined-metrics-header {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(0, 212, 170, 0.1));
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .combined-reach-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00d4aa, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-analysis {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .analysis-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #00d4aa;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .analysis-section {
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .analysis-section-title {
+            color: #7c3aed;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
         .engagement-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
-            margin-top: 2rem;
         }
 
         .engagement-item {
@@ -221,84 +385,6 @@
             font-weight: bold;
             color: #64748b;
             margin-bottom: 0.5rem;
-        }
-
-        .cta-analysis {
-            background: rgba(124, 58, 237, 0.1);
-            border: 1px solid rgba(124, 58, 237, 0.3);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .cta-title {
-            color: #7c3aed;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .cta-item {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1rem;
-            border-radius: 6px;
-            margin-bottom: 0.5rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-
-        .floating-icons {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .floating-icon {
-            position: absolute;
-            font-size: 2rem;
-            opacity: 0.1;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-30px) rotate(180deg); }
-        }
-
-        .floating-icon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-        .floating-icon:nth-child(2) { top: 20%; left: 80%; animation-delay: 2s; }
-        .floating-icon:nth-child(3) { top: 60%; left: 20%; animation-delay: 4s; }
-        .floating-icon:nth-child(4) { top: 80%; left: 70%; animation-delay: 6s; }
-
-        .pending-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            border: 1px solid #60a5fa;
-            margin-left: 1rem;
-        }
-
-        .pulse {
-            width: 8px;
-            height: 8px;
-            background: #60a5fa;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
         }
 
         .action-buttons {
@@ -341,19 +427,41 @@
             background: rgba(148, 163, 184, 0.2);
         }
 
-        .campaign-type {
-            background: rgba(0, 212, 170, 0.1);
-            color: #00d4aa;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
+        .zero-state {
+            opacity: 0.6;
         }
+
+        .floating-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        .floating-icon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { top: 20%; left: 80%; animation-delay: 2s; }
+        .floating-icon:nth-child(3) { top: 60%; left: 20%; animation-delay: 4s; }
+        .floating-icon:nth-child(4) { top: 80%; left: 70%; animation-delay: 6s; }
     </style>
 </head>
 <body>
     <div class="floating-icons">
-        <div class="floating-icon">🐙</div>
+        <div class="floating-icon">📧</div>
         <div class="floating-icon">⚡</div>
         <div class="floating-icon">📊</div>
         <div class="floating-icon">🚀</div>
@@ -361,28 +469,26 @@
 
     <div class="container">
         <div class="header">
-            <div class="gitkraken-logo">
-                GitLens & GitKraken
-            </div>
+            <div class="brand-logo">GitLens & GitKraken</div>
             <h1 class="main-title">Promo Winback Performance Dashboard</h1>
         </div>
 
         <div class="email-preview">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div class="email-grid">
                 <!-- GitLens Email -->
-                <div style="background: rgba(124, 58, 237, 0.1); border-radius: 8px; padding: 1.5rem; border: 1px solid rgba(124, 58, 237, 0.3);">
-                    <div class="email-subject" style="color: #a855f7;">
-                        🔍 GitLens: 48 hours to upgrade to GitLens Pro and save
+                <div class="email-card gitlens-card">
+                    <div class="email-subject gitlens-subject">
+                        GitLens: 48 hours to upgrade to GitLens Pro and save
                     </div>
-                    <div style="color: #94a3b8; font-style: italic; margin-bottom: 1rem; font-size: 1rem;">
-                        📧 Preview: Your trial may be over, but smarter workflows don't have to be.
+                    <div class="email-preview-text">
+                        Preview: Your trial may be over, but smarter workflows don't have to be.
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="email-meta">
                         <div class="meta-item">
                             <div class="meta-label">Email ID</div>
                             <div class="meta-value">
                                 <a href="https://app.hubspot.com/email/544893/details/195297650801/performance" 
-                                   style="color: #a855f7; text-decoration: underline; font-family: 'Courier New', monospace;">
+                                   target="_blank" style="color: #a855f7;">
                                     195297650801
                                 </a>
                             </div>
@@ -391,8 +497,6 @@
                             <div class="meta-label">Product</div>
                             <div class="meta-value">GitLens Pro</div>
                         </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="meta-item">
                             <div class="meta-label">Sender</div>
                             <div class="meta-value">Melese with GitLens</div>
@@ -405,19 +509,19 @@
                 </div>
 
                 <!-- GitKraken Email -->
-                <div style="background: rgba(0, 212, 170, 0.1); border-radius: 8px; padding: 1.5rem; border: 1px solid rgba(0, 212, 170, 0.3);">
-                    <div class="email-subject" style="color: #00d4aa;">
+                <div class="email-card gitkraken-card">
+                    <div class="email-subject gitkraken-subject">
                         GitKraken: 48 hours to upgrade GitKraken and save
                     </div>
-                    <div style="color: #94a3b8; font-style: italic; margin-bottom: 1rem; font-size: 1rem;">
-                        📧 Preview: Your trial may be over, but smarter Git workflows don't have to be.
+                    <div class="email-preview-text">
+                        Preview: Your trial may be over, but smarter Git workflows don't have to be.
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="email-meta">
                         <div class="meta-item">
                             <div class="meta-label">Email ID</div>
                             <div class="meta-value">
                                 <a href="https://app.hubspot.com/email/544893/details/195291585699/performance" 
-                                   style="color: #00d4aa; text-decoration: underline; font-family: 'Courier New', monospace;">
+                                   target="_blank" style="color: #00d4aa;">
                                     195291585699
                                 </a>
                             </div>
@@ -426,8 +530,6 @@
                             <div class="meta-label">Product</div>
                             <div class="meta-value">GitKraken Desktop</div>
                         </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="meta-item">
                             <div class="meta-label">Sender</div>
                             <div class="meta-value">Jonathan at GitKraken</div>
@@ -440,8 +542,8 @@
                 </div>
             </div>
 
-            <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem;">
-                <div class="email-status">DRAFT - AWAITING SEND</div>
+            <div class="status-row">
+                <div class="status-badge">DRAFT - AWAITING SEND</div>
                 <div class="pending-badge">
                     <div class="pulse"></div>
                     Twin campaigns ready for deployment
@@ -449,132 +551,181 @@
             </div>
         </div>
 
-        <div class="dashboard-grid">
-            <!-- Combined Metrics Row -->
-            <div class="metric-card zero-state" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(0, 212, 170, 0.1));">
-                <div style="text-align: center;">
-                    <div class="metric-icon">🎯</div>
+        <!-- Combined Campaign Reach -->
+        <div class="combined-metrics-header">
+            <div class="metric-icon">🎯</div>
+            <div class="combined-reach-number">0</div>
+            <div class="metric-label">Combined Campaign Reach</div>
+            <div class="metric-description">Total potential audience: GitLens + GitKraken Desktop trial users (~4,500-5,000)</div>
+        </div>
+
+        <!-- GitLens Metrics -->
+        <div class="metrics-section">
+            <div class="section-header">
+                <h3 class="section-title gitlens-title">GitLens Pro Performance</h3>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card zero-state gitlens-card-border">
+                    <div class="metric-icon">📤</div>
                     <div class="metric-number">0</div>
-                    <div class="metric-label">Combined Campaign Reach</div>
-                    <div class="metric-description">Total potential audience: GitLens + GitKraken trial users (~4,500-5,000)</div>
+                    <div class="metric-label">GitLens Sent</div>
+                    <div class="metric-description">Total emails queued for sending</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill gitlens-progress"></div>
+                    </div>
                 </div>
-            </div>
-
-            <!-- GitLens Metrics -->
-            <div style="grid-column: 1 / -1; margin: 2rem 0 1rem 0; text-align: center;">
-                <h3 style="color: #a855f7; font-size: 1.5rem; font-weight: 600;">🔍 GitLens Pro Performance</h3>
-            </div>
-            
-            <div class="metric-card zero-state" style="border-color: rgba(124, 58, 237, 0.3);">
-                <div class="metric-icon">📬</div>
-                <div class="metric-number">0</div>
-                <div class="metric-label">GitLens Delivered</div>
-                <div class="metric-description">Expected: ~2,000 GitLens trial users</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%; background: linear-gradient(90deg, #a855f7, #7c3aed);"></div>
+                
+                <div class="metric-card zero-state gitlens-card-border">
+                    <div class="metric-icon">📬</div>
+                    <div class="metric-number">0</div>
+                    <div class="metric-label">GitLens Delivered</div>
+                    <div class="metric-description">Expected: ~2,000 GitLens trial users</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill gitlens-progress"></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="metric-card zero-state" style="border-color: rgba(124, 58, 237, 0.3);">
-                <div class="metric-icon">👁️</div>
-                <div class="metric-number">0%</div>
-                <div class="metric-label">GitLens Open Rate</div>
-                <div class="metric-description">Industry avg: 24-30% for VS Code extensions</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%; background: linear-gradient(90deg, #a855f7, #7c3aed);"></div>
+                <div class="metric-card zero-state gitlens-card-border">
+                    <div class="metric-icon">👁️</div>
+                    <div class="metric-number">0%</div>
+                    <div class="metric-label">GitLens Open Rate</div>
+                    <div class="metric-description">Industry avg: 24-30% for VS Code extensions</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill gitlens-progress"></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="metric-card zero-state" style="border-color: rgba(124, 58, 237, 0.3);">
-                <div class="metric-icon">🖱️</div>
-                <div class="metric-number">0%</div>
-                <div class="metric-label">GitLens CTR</div>
-                <div class="metric-description">Target: 6-9% on upgrade CTA</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%; background: linear-gradient(90deg, #a855f7, #7c3aed);"></div>
-                </div>
-            </div>
-
-            <!-- GitKraken Metrics -->
-            <div style="grid-column: 1 / -1; margin: 2rem 0 1rem 0; text-align: center;">
-                <h3 style="color: #00d4aa; font-size: 1.5rem; font-weight: 600;">🐙 GitKraken Desktop Performance</h3>
-            </div>
-            
-            <div class="metric-card zero-state" style="border-color: rgba(0, 212, 170, 0.3);">
-                <div class="metric-icon">📬</div>
-                <div class="metric-number">0</div>
-                <div class="metric-label">GitKraken Desktop Delivered</div>
-                <div class="metric-description">Expected: ~2,500 GitKraken Desktop trial users</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <div class="metric-card zero-state" style="border-color: rgba(0, 212, 170, 0.3);">
-                <div class="metric-icon">👁️</div>
-                <div class="metric-number">0%</div>
-                <div class="metric-label">GitKraken Desktop Open Rate</div>
-                <div class="metric-description">Industry avg: 22-28% for Git tools</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <div class="metric-card zero-state" style="border-color: rgba(0, 212, 170, 0.3);">
-                <div class="metric-icon">🖱️</div>
-                <div class="metric-number">0%</div>
-                <div class="metric-label">GitKraken Desktop CTR</div>
-                <div class="metric-description">Target: 6-9% (urgency-focused subject line)</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <!-- Combined Performance Metrics -->
-            <div style="grid-column: 1 / -1; margin: 2rem 0 1rem 0; text-align: center;">
-                <h3 style="color: #ffffff; font-size: 1.5rem; font-weight: 600;">📊 Combined Performance</h3>
-            </div>
-
-            <div class="metric-card zero-state">
-                <div class="metric-icon">💳</div>
-                <div class="metric-number">0%</div>
-                <div class="metric-label">Overall Conversion Rate</div>
-                <div class="metric-description">Expected: 2-4% trial-to-paid across both products</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <div class="metric-card zero-state">
-                <div class="metric-icon">🚫</div>
-                <div class="metric-number">0%</div>
-                <div class="metric-label">Combined Bounce Rate</div>
-                <div class="metric-description">Expected: <2% (clean trial user lists)</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <div class="metric-card zero-state">
-                <div class="metric-icon">💰</div>
-                <div class="metric-number">$0</div>
-                <div class="metric-label">Total Revenue Impact</div>
-                <div class="metric-description">Potential: $25,000-50,000 from both campaigns</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
+                <div class="metric-card zero-state gitlens-card-border">
+                    <div class="metric-icon">🖱️</div>
+                    <div class="metric-number">0%</div>
+                    <div class="metric-label">GitLens CTR</div>
+                    <div class="metric-description">Target: 6-9% on upgrade CTA</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill gitlens-progress"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="performance-section">
-            <h2 class="section-title">🎯 Email Content Analysis</h2>
+        <!-- GitKraken Desktop Metrics -->
+        <div class="metrics-section">
+            <div class="section-header">
+                <h3 class="section-title gitkraken-title">GitKraken Desktop Performance</h3>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card zero-state gitkraken-card-border">
+                    <div class="metric-icon">📤</div>
+                    <div class="metric-number">0</div>
+                    <div class="metric-label">GitKraken Desktop Sent</div>
+                    <div class="metric-description">Total emails queued for sending</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card zero-state gitkraken-card-border">
+                    <div class="metric-icon">📬</div>
+                    <div class="metric-number">0</div>
+                    <div class="metric-label">GitKraken Desktop Delivered</div>
+                    <div class="metric-description">Expected: ~2,500 GitKraken Desktop trial users</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card zero-state gitkraken-card-border">
+                    <div class="metric-icon">👁️</div>
+                    <div class="metric-number">0%</div>
+                    <div class="metric-label">GitKraken Desktop Open Rate</div>
+                    <div class="metric-description">Industry avg: 22-28% for Git tools</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card zero-state gitkraken-card-border">
+                    <div class="metric-icon">🖱️</div>
+                    <div class="metric-number">0%</div>
+                    <div class="metric-label">GitKraken Desktop CTR</div>
+                    <div class="metric-description">Target: 6-9% (urgency-focused subject line)</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Combined Performance Metrics -->
+        <div class="metrics-section">
+            <div class="section-header">
+                <h3 class="section-title combined-title">Combined Performance</h3>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card zero-state">
+                    <div class="metric-icon">💳</div>
+                    <div class="metric-number">0%</div>
+                    <div class="metric-label">Overall Conversion Rate</div>
+                    <div class="metric-description">Expected: 2-4% trial-to-paid across both products</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card zero-state">
+                    <div class="metric-icon">🚫</div>
+                    <div class="metric-number">0%</div>
+                    <div class="metric-label">Combined Bounce Rate</div>
+                    <div class="metric-description">Expected: <2% (clean trial user lists)</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card zero-state">
+                    <div class="metric-icon">💰</div>
+                    <div class="metric-number">$0</div>
+                    <div class="metric-label">Total Revenue Impact</div>
+                    <div class="metric-description">Potential: $25,000-50,000 from both campaigns</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card zero-state">
+                    <div class="metric-icon">📊</div>
+                    <div class="metric-number">0</div>
+                    <div class="metric-label">Total Conversions</div>
+                    <div class="metric-description">Expected: 90-200 trial-to-paid conversions</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Analysis -->
+        <div class="content-analysis">
+            <h2 class="analysis-title">Campaign Content Analysis</h2>
             
-            <div class="cta-analysis">
-                <div class="cta-title">⚙️ Workflow Integration</div>
-                <div class="cta-item">Delivery Method: Automated workflow (ID: 1637765790)</div>
-                <div class="cta-item">Trigger: Trial expiry + 7 days (post-trial nurture sequence)</div>
-                <div class="cta-item">Audience Filter: Trial users who haven't upgraded to paid</div>
-                <div class="cta-item">Send Window: 48-hour limited time offer activation</div>
+            <div class="analysis-grid">
+                <div class="analysis-section">
+                    <div class="analysis-section-title">Workflow Integration</div>
+                    <div class="analysis-item">Delivery Method: Automated workflow (ID: 1637765790)</div>
+                    <div class="analysis-item">Trigger: Trial expiry + 7 days (post-trial nurture sequence)</div>
+                    <div class="analysis-item">Audience Filter: Trial users who haven't upgraded to paid</div>
+                    <div class="analysis-item">Send Window: 48-hour limited time offer activation</div>
+                </div>
+
+                <div class="analysis-section">
+                    <div class="analysis-section-title">Email Content Strategy</div>
+                    <div class="analysis-item">Subject Line: "48 hours to upgrade..." (Time urgency + value)</div>
+                    <div class="analysis-item">Preview Text: "Your trial may be over, but..." (Continuity message)</div>
+                    <div class="analysis-item">Primary CTA: "Upgrade now. Save up to 85%" (Discount focus)</div>
+                    <div class="analysis-item">Hook Strategy: Trial expiry acknowledgment + workflow benefits retention</div>
+                </div>
             </div>
 
             <div class="engagement-grid" style="margin-top: 2rem;">
@@ -595,42 +746,22 @@
                     <div>Unsubscribes</div>
                 </div>
             </div>
-
-            <div class="cta-analysis" style="margin-top: 1.5rem;">
-                <div class="cta-title">📝 Email Content Strategy</div>
-                <div class="cta-item">Subject Line: "48 hours to upgrade GitKraken and save" (Time urgency + value)</div>
-                <div class="cta-item">Preview Text: "Your trial may be over, but smarter Git workflows don't have to be." (Continuity message)</div>
-                <div class="cta-item">Primary CTA: "Upgrade now. Save up to 85%" (High urgency, discount focus)</div>
-                <div class="cta-item">Secondary CTA: "Reply to this email" (Low friction, personal touch)</div>
-                <div class="cta-item">Hook Strategy: Trial expiry acknowledgment + workflow benefits retention</div>
-            </div>
         </div>
 
         <div class="action-buttons">
-            <a href="https://app.hubspot.com/email/544893/edit/195297650801/content" class="btn btn-primary">
-                🔍 Edit GitLens Email
+            <a href="https://app.hubspot.com/email/544893/edit/195297650801/content" target="_blank" class="btn btn-primary">
+                Edit GitLens Email
             </a>
-            <a href="https://app.hubspot.com/email/544893/edit/195291585699" class="btn btn-primary">
-                🐙 Edit GitKraken Email
+            <a href="https://app.hubspot.com/email/544893/edit/195291585699" target="_blank" class="btn btn-primary">
+                Edit GitKraken Email
             </a>
-            <a href="https://app.hubspot.com/workflows/544893/platform/flow/1637765790/edit" class="btn btn-secondary">
-                ⚙️ View Workflow
+            <a href="https://app.hubspot.com/workflows/544893/platform/flow/1637765790/edit" target="_blank" class="btn btn-secondary">
+                View Workflow
             </a>
         </div>
     </div>
 
     <script>
-        // Add dynamic content based on email analysis
-        const emailAnalysis = {
-            subject: "48 hours to upgrade GitKraken and save",
-            previewText: "Your trial may be over, but smarter Git workflows don't have to be.",
-            sender: "Jonathan Silva, Senior Product Advocate", 
-            campaignType: "Trial Conversion",
-            urgency: "48 hours",
-            discount: "85%",
-            features: ["AI commits", "merge tools", "private repos"]
-        };
-
         // Add interactivity to cards
         document.querySelectorAll('.metric-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
@@ -641,18 +772,6 @@
                 card.style.transform = 'translateY(0) scale(1)';
             });
         });
-
-        // Keep the blue status badge static
-
-        // Dynamic time-based greeting
-        const hour = new Date().getHours();
-        let timeGreeting = "";
-        if (hour < 12) timeGreeting = "🌅 Morning";
-        else if (hour < 17) timeGreeting = "☀️ Afternoon"; 
-        else timeGreeting = "🌙 Evening";
-
-        // Show campaign insights
-        console.log("📊 GitKraken Email Campaign Analysis:", emailAnalysis);
     </script>
 </body>
 </html>
