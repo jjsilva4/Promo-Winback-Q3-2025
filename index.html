@@ -416,8 +416,14 @@
 
         .analysis-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
             gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .analysis-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .analysis-section {
@@ -559,7 +565,7 @@
             <div class="brand-logo">GitLens & GitKraken</div>
             <h1 class="main-title">Promo Winback Performance Dashboard</h1>
             <div class="last-updated">
-                Last updated: <span id="timestamp">August 29, 2025 at 5:48 PM EDT</span>
+                Last updated: <span id="timestamp">August 29, 2025 at 5:51 PM EDT</span>
             </div>
         </div>
 
