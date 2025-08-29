@@ -22,7 +22,13 @@
         .container {
             max-width: 1600px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
         }
 
         .header {
@@ -38,13 +44,19 @@
         }
 
         .main-title {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
             margin-bottom: 1rem;
             background: linear-gradient(45deg, #00d4aa, #7c3aed);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+        }
+
+        @media (min-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
         }
 
         .last-updated {
@@ -69,15 +81,27 @@
 
         .email-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 2rem;
             margin-bottom: 2rem;
         }
 
+        @media (min-width: 768px) {
+            .email-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
         .email-card {
             border-radius: 8px;
-            padding: 1.5rem;
+            padding: 1rem;
             border: 1px solid;
+        }
+
+        @media (min-width: 768px) {
+            .email-card {
+                padding: 1.5rem;
+            }
         }
 
         .gitlens-card {
@@ -143,8 +167,16 @@
         .status-row {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 1rem;
             margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        @media (min-width: 768px) {
+            .status-row {
+                gap: 2rem;
+                flex-wrap: nowrap;
+            }
         }
 
         .status-badge {
@@ -234,11 +266,17 @@
             background: rgba(15, 23, 42, 0.8);
             border-radius: 12px;
             border: 1px solid rgba(148, 163, 184, 0.1);
-            padding: 2rem;
+            padding: 1.5rem;
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .metric-card {
+                padding: 2rem;
+            }
         }
 
         .metric-card::before {
@@ -403,18 +441,29 @@
             gap: 1rem;
             justify-content: center;
             margin-top: 2rem;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 1rem 2rem;
+            padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-decoration: none;
             display: inline-block;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        @media (min-width: 768px) {
+            .btn {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+                min-width: auto;
+            }
         }
 
         .btn-primary {
